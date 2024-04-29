@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Estoque de Produtos</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
-    <script type="text/javascript" src="js/script.js"></script>
-
 
 </head>
 <body>
@@ -24,5 +22,75 @@
         <h2>Produtos no Estoque:</h2>
         <ul id="lista-produtos"></ul>
     </div>
+
+    <script>
+        // Array para armazenar os produtos no estoque
+        let estoque = [];
+
+        // Variável global para o ID do próximo produto
+        let proximoId = 1;
+
+        // Função para adicionar um novo produto ao estoque
+        function adicionarNovoProduto() {
+            let nome = document.getElementById('nome').value;
+            let quantidade = parseInt(document.getElementById('quantidade').value);
+            let preco = parseFloat(document.getElementById('preco').value);
+            let descricao = document.getElementById('descricao').value;
+            
+            if (nome && quantidade && preco && descricao) {
+                adicionarProduto(nome, quantidade, preco, descricao);
+                listarProdutos();
+            } else {
+                console.log("Por favor, preencha todos os campos.");
+            }
+        }
+
+        // Função para adicionar um novo produto ao estoque
+        function adicionarProduto(nome, quantidade, preco, descricao) {
+            let produto = {
+                id: proximoId++,
+                nome: nome,
+                quantidade: quantidade,
+                preco: preco,
+                descricao: descricao
+            };
+            estoque.push(produto);
+            console.log("Produto adicionado ao estoque:", produto);
+        }
+
+        // Função para listar todos os produtos no estoque
+        function listarProdutos() {
+            console.log("Produtos no estoque:");
+            let listaProdutos = document.getElementById('lista-produtos');
+            listaProdutos.innerHTML = '';
+            for (let i = 0; i < estoque.length; i++) {
+                let produto = estoque[i];
+                let li = document.createElement('li');
+                li.textContent = `${produto.id}: ${produto.nome} - ${produto.quantidade} unidades - R$ ${produto.preco.toFixed(2)}`;
+                
+                let botaoRemover = document.createElement('button');
+                botaoRemover.textContent = 'Remover';
+                botaoRemover.onclick = function() {
+                    removerProduto(produto.id);
+                    listarProdutos();
+                };
+
+                li.appendChild(botaoRemover);
+                listaProdutos.appendChild(li);
+            }
+        }
+
+        // Função para remover um produto do estoque
+        function removerProduto(id) {
+            for (let i = 0; i < estoque.length; i++) {
+                if (estoque[i].id === id) {
+                    let produtoRemovido = estoque.splice(i, 1);
+                    console.log("Produto removido do estoque:", produtoRemovido);
+                    return;
+                }
+            }
+            console.log("Produto não encontrado no estoque.");
+        }
+    </script>
 </body>
 </html>
